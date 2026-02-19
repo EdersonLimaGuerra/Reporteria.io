@@ -1,7 +1,7 @@
 // Hardcoded Users (Simulating a Database)
 const users = {
     "ederson": { pass: "123", allowed: ["report2"] },
-    "Victor": { pass: "456", allowed: ["report2"] },
+    "victor": { pass: "Global", allowed: ["report2"] },
     "admin": { pass: "admin", allowed: ["report1", "report2", "report3", "report4"] }
 };
 
@@ -139,3 +139,4 @@ document.getElementById("password").addEventListener("keypress", function (event
         login();
     }
 });
+
