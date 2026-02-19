@@ -24,7 +24,7 @@ toggleButton.onclick = function () {
 // Report Data
 const reports = {
     report1: "https://app.powerbi.com/reportEmbed?reportId=e5b695f5-3b3b-4ea9-a0e3-ab768b09d8eb&autoAuth=true&ctid=9abd5502-ffb5-4e96-8132-dc94e37b1d20",
-    report2: "https://app.powerbi.com/reportEmbed?reportId=e406f940-c8fb-43d1-adbc-536e8843fcde&autoAuth=true&ctid=9abd5502-ffb5-4e96-8132-dc94e37b1d20",
+    report2: "https://app.powerbi.com/reportEmbed?reportId=23dbe468-4bf8-4180-9d5a-349b8726e82e&autoAuth=true&ctid=9abd5502-ffb5-4e96-8132-dc94e37b1d20",
     report3: "https://app.powerbi.com/view?r=eyJrIjoiEXAMPLE_URL_3",
     report4: "https://app.powerbi.com/view?r=eyJrIjoiEXAMPLE_URL_4"
 };
@@ -139,4 +139,5 @@ document.getElementById("password").addEventListener("keypress", function (event
         login();
     }
 });
+
 
