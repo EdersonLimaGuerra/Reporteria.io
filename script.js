@@ -1,8 +1,8 @@
 // Hardcoded Users (Simulating a Database)
 const users = {
     "ederson": { pass: "123", allowed: ["report2"] },
-    "victor": { pass: "Global", allowed: ["report2"] },
-    "admin": { pass: "admin", allowed: ["report1", "report2", "report3", "report4"] }
+    "victor": { pass: "Global", allowed: ["report2", "report3"] },
+    "admin": { pass: "admin", allowed: ["report2", "report3"] }
 };
 
 let currentUser = null;
@@ -15,6 +15,8 @@ var reportContainer = document.getElementById("report-container");
 var iframe = document.getElementById("powerbi-frame");
 var loadingSpinner = document.getElementById("loading-spinner");
 var placeholderMessage = document.getElementById("placeholder-message");
+var reportTitle = document.getElementById("report-title");
+var externalLink = document.getElementById("external-link");
 
 // Toggle Sidebar
 toggleButton.onclick = function () {
@@ -95,8 +97,12 @@ function loadReport(reportId, element) {
     listItems.forEach(item => item.classList.remove('active'));
     element.classList.add('active');
 
+    // Update Title
+    const reportName = element.innerText.trim();
+    reportTitle.innerText = reportName;
+
     // 2. Show Loading State
-    iframe.style.display = 'none';
+    iframe.style.opacity = '0';
     placeholderMessage.style.display = 'block';
     loadingSpinner.style.display = 'inline-block';
     placeholderMessage.querySelector('h3').innerText = "Cargando reporte...";
@@ -105,7 +111,6 @@ function loadReport(reportId, element) {
     // 3. Load URL
     const url = reports[reportId];
 
-    // Check if it's a dummy URL
     if (url.includes("EXAMPLE_URL")) {
         setTimeout(() => {
             loadingSpinner.style.display = 'none';
@@ -113,22 +118,46 @@ function loadReport(reportId, element) {
             placeholderMessage.querySelector('p').innerHTML = "Este es un <span class='text-info'>ejemplo</span>.";
         }, 1000);
     } else {
-        iframe.src = url;
+        // Clear iframe before loading new source to avoid "sticky" previous content
+        iframe.src = "about:blank";
+
+        // Use a short delay before setting new src to ensure clean state
+        setTimeout(() => {
+            iframe.src = url;
+
+            // Show iframe almost immediately for public reports to avoid perceived lag
+            // If it's a public report (starts with /view?r=), we can be bolder
+            if (url.includes("/view?r=")) {
+                setTimeout(() => {
+                    loadingSpinner.style.display = 'none';
+                    placeholderMessage.style.display = 'none';
+                    iframe.style.opacity = '1';
+                }, 1000);
+            }
+        }, 50);
+
+        // Show/Update External Link Button
+        if (url.includes("https")) {
+            externalLink.href = url;
+            externalLink.classList.remove('d-none');
+        } else {
+            externalLink.classList.add('d-none');
+        }
 
         iframe.onload = function () {
             loadingSpinner.style.display = 'none';
             placeholderMessage.style.display = 'none';
-            iframe.style.display = 'block';
+            iframe.style.opacity = '1';
         };
 
-        // Timeout fallback
+        // Fallback for slower connections
         setTimeout(() => {
-            if (iframe.style.display === 'none' && !url.includes("EXAMPLE_URL")) {
+            if (iframe.style.opacity === '0' && !url.includes("EXAMPLE_URL")) {
                 loadingSpinner.style.display = 'none';
                 placeholderMessage.style.display = 'none';
-                iframe.style.display = 'block';
+                iframe.style.opacity = '1';
             }
-        }, 2000);
+        }, 5000);
     }
 }
 
@@ -139,5 +168,3 @@ document.getElementById("password").addEventListener("keypress", function (event
         login();
     }
 });
-
-
